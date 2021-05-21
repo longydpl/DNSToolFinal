@@ -5,6 +5,10 @@
  */
 package dnstoolfinal;
 import  exception.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import javax.swing.JOptionPane;
 /**
  *
  * @author longy
@@ -15,7 +19,8 @@ public class MainFrom extends javax.swing.JFrame {
      * Creates new form MainFrom
      */
     //Tạo các biến sử dụng trong chương trình
-    
+    StorageClass storageClass = new StorageClass();
+    HashMap<Integer,Sensor> listSensor =  new HashMap();
     //End
     public MainFrom() {
         initComponents();
@@ -124,6 +129,11 @@ public class MainFrom extends javax.swing.JFrame {
         });
 
         btnExecute.setText("Execute");
+        btnExecute.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExecuteActionPerformed(evt);
+            }
+        });
 
         btnDrawNetwork.setText("Draw Network");
         btnDrawNetwork.addActionListener(new java.awt.event.ActionListener() {
@@ -281,8 +291,81 @@ public class MainFrom extends javax.swing.JFrame {
 
     private void btnCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateActionPerformed
         // Tính toán số lượng cảm biến cần phải thả:
-        
+        try {
+            //Kiểm tra có ô nào không nhập hay không
+            checkNull();
+            //Gán các giá trị vừa nhập để sử dụng toàn cục
+            storageClass.setAnpla(Double.parseDouble(txtOffsetAngle.getText().trim()));
+            storageClass.setH(Float.parseFloat(txtH.getText().trim()));
+            storageClass.setP(Float.parseFloat(txtP.getText().trim()));
+            storageClass.setR(Double.parseDouble(txtRadius.getText().trim()));
+            storageClass.setT0(Integer.parseInt(txtT0.getText().trim()));
+            storageClass.setT(Integer.parseInt(txtT.getText().trim()));
+            storageClass.setW(Float.parseFloat(txtW.getText().trim()));
+            //Kiểm tra các lỗi về giá trị của từng biến nhập vào
+            checkRadius(storageClass.getR());
+            checkAngle(storageClass.getAnpla());
+            checkLifeTime(storageClass.getT());
+            checkHeight(storageClass.getH());
+            checkWidth(storageClass.getW());
+            checkCoverage(storageClass.getP());
+            checkTimeOfSensor(storageClass.getT0());
+            //Trả về kết quả tính toán của mạng.
+            txaResult.setText(storageClass.toString());
+        } catch (NullException e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+        }
+        catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Input format wrong!! Try again!!");
+        }
+        catch (RadiusException | OffsetAngleException | HeghtException | WidthException | LifeTimeException | CoverageException | TimeOfSensorException ex){
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+        }
     }//GEN-LAST:event_btnCalculateActionPerformed
+
+    private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
+        // Thả ngẫu nhiên, kết nối các sensor, và sửa chữa
+        //Thả ngẫu nhiên các sensor
+        Random r =  new Random();
+        for(int i =0; i<storageClass.getGroup();i++)
+        {
+            int j = storageClass.getN0()*i+1;
+            int maxS = storageClass.getN0()*(i+1);
+            while(j<=maxS)
+            {
+                int x = (int) (Math.abs(r.nextInt()) % storageClass.getW()); //Defind x for each sensor. 
+                int y = (int) (Math.abs(r.nextInt()) % storageClass.getH()); //Defind y for each sensor.
+                float mina=0;
+                float maxa=(float) (Math.PI*2);
+                float anpla = ( r.nextFloat()* (maxa - mina+ 1) + mina);
+                int dx = (int) (x-8*Math.sin(anpla));
+                int dy = (int) (y+8*Math.cos(anpla));
+                listSensor.put(j,new Sensor(x, y,dx,dy, storageClass.getR(), (float) storageClass.getAnpla(),storageClass.getT0()));
+                j++;
+            }
+        }
+        //Tìm và thêm danh sách các sensor nằm trong vùng kết nối của từng sensor
+        for(int i =0; i<storageClass.getGroup();i++)
+        {
+            int j = storageClass.getN0()*i+1;
+            int maxS = storageClass.getN0()*(i+1);
+            while(j<maxS)
+            {
+                for(int k = j+1;k<=maxS;k++)
+                {
+                    if(listSensor.get(j).checkConnect(listSensor.get(k))) listSensor.get(j).addADJSensor(k);
+                }
+                j++;
+            }
+        }
+        txaResult.append("Coordinates of sensor:\n");
+        for(Map.Entry m: listSensor.entrySet())
+        {
+            txaResult.append(m.getKey()+ " " );
+            Sensor s = (Sensor) m.getValue();
+            txaResult.append(s.getX() + " " + s.getY() + " " + s.getDx() + " " + s.getDy() + " |" + s.getListADJ().toString() +"\n");
+        }
+    }//GEN-LAST:event_btnExecuteActionPerformed
 
     /**
      * @param args the command line arguments
