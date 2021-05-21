@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package dnstoolfinal;
-
+import  exception.*;
 /**
  *
  * @author longy
@@ -117,6 +117,11 @@ public class MainFrom extends javax.swing.JFrame {
         });
 
         btnCalculate.setText("Calculate");
+        btnCalculate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCalculateActionPerformed(evt);
+            }
+        });
 
         btnExecute.setText("Execute");
 
@@ -274,6 +279,11 @@ public class MainFrom extends javax.swing.JFrame {
         txaResult.setText("");
     }//GEN-LAST:event_btnClearActionPerformed
 
+    private void btnCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateActionPerformed
+        // Tính toán số lượng cảm biến cần phải thả:
+        
+    }//GEN-LAST:event_btnCalculateActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -310,6 +320,37 @@ public class MainFrom extends javax.swing.JFrame {
         });
     }
 
+    //Định nghĩa các ngoại lệ
+     private void checkNull() throws NullException{
+        if(txtP.getText().trim().equals("")) throw new NullException("Coverage null!! Try again!!");
+        if(txtH.getText().trim().equals("")) throw new NullException("Height null!! Try again!!");
+        if(txtT.getText().trim().equals("")) throw new NullException("LifeTime of Network null!! Try again!!");
+        if(txtOffsetAngle.getText().trim().equals("")) throw new NullException("Angle null!! Try again!!");
+        if(txtRadius.getText().trim().equals(""))throw new NullException("Radius null!! Try again!!");
+        if(txtT0.getText().trim().equals("")) throw new NullException("Time null!! Try again!!");
+        if(txtW.getText().trim().equals("")) throw new NullException("Width null!! Try again!!");
+    }
+    private void checkRadius(double r) throws RadiusException{
+        if(r<=0||r>100) throw new RadiusException("Radius must be between 0 and 100!! Try again");
+    }
+    private void checkAngle(double anpla) throws OffsetAngleException{
+        if(anpla<=0||anpla>180)throw new OffsetAngleException("Angle is not in the range 0->180!!Try again");
+    }
+    private void checkLifeTime(int t) throws LifeTimeException{
+        if(t<=0||t>18000)throw new LifeTimeException("LifeTime must be between 0 and 18000 !! Try again ");
+    }
+    private void checkHeight(float height) throws HeghtException{
+       if(height<=0||height>1000)throw new HeghtException("Height must be between 0 and 1000 !! Try again ");
+    }
+    private void checkWidth(float width) throws WidthException{
+        if(width<=0||width>1000)throw new WidthException("Width must be between 0 and 1000 !! Try again ");
+    }
+    private void checkCoverage(float p) throws CoverageException{
+        if(p<=0||p>1)throw new CoverageException("Coverage must be between 0 and 1 !! Try again ");
+    }
+    private void checkTimeOfSensor(int t0) throws TimeOfSensorException{
+       if(t0<=0||t0>3600*24)throw new TimeOfSensorException("Width must be between 0 and 86400 !! Try again ");
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalculate;
     private javax.swing.JButton btnClear;
