@@ -33,7 +33,7 @@ public class StorageClass {
     }
 
     public void setAnpla(double anpla) {
-        this.anpla = anpla*Math.PI/180;
+        this.anpla = Math.toRadians(anpla);
     }
 
     public float getH() {

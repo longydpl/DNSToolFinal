@@ -5,6 +5,7 @@
  */
 package dnstoolfinal;
 import  exception.*;
+import java.awt.EventQueue;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -273,10 +274,6 @@ public class MainFrom extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnDrawNetworkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDrawNetworkActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnDrawNetworkActionPerformed
-
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         //Xử lý xóa toàn bộ nội dung trong các textbox và textArea
         txtH.setText((""));
@@ -324,7 +321,6 @@ public class MainFrom extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCalculateActionPerformed
 
     private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
-        // Thả ngẫu nhiên, kết nối các sensor, và sửa chữa
         //Thả ngẫu nhiên các sensor
         Random r =  new Random();
         for(int i =0; i<storageClass.getGroup();i++)
@@ -338,9 +334,7 @@ public class MainFrom extends javax.swing.JFrame {
                 float mina=0;
                 float maxa=(float) (Math.PI*2);
                 float anpla = ( r.nextFloat()* (maxa - mina+ 1) + mina);
-                int dx = (int) (x-8*Math.sin(anpla));
-                int dy = (int) (y+8*Math.cos(anpla));
-                listSensor.put(j,new Sensor(x, y,dx,dy, storageClass.getR(), (float) storageClass.getAnpla(),storageClass.getT0()));
+                listSensor.put(j,new Sensor(x, y, storageClass.getR(), (float) storageClass.getAnpla(),storageClass.getT0(), (float) Math.cos(anpla), (float) Math.sin(anpla)));
                 j++;
             }
         }
@@ -358,6 +352,8 @@ public class MainFrom extends javax.swing.JFrame {
                 j++;
             }
         }
+        
+        txaResult.append("\n--------------------------------------\n");
         txaResult.append("Coordinates of sensor:\n");
         for(Map.Entry m: listSensor.entrySet())
         {
@@ -365,7 +361,39 @@ public class MainFrom extends javax.swing.JFrame {
             Sensor s = (Sensor) m.getValue();
             txaResult.append(s.getX() + " " + s.getY() + " " + s.getDx() + " " + s.getDy() + " |" + s.getListADJ().toString() +"\n");
         }
+        txaResult.append("\n--------------------------------------\n");
+        for(int i = 0;i<storageClass.getGroup();i++)
+        {
+            int n0 = storageClass.getN0();
+            int maxADJ = 0;
+            int keyMaxADJ = 0;
+            for(int j = n0*i+1;j<=n0*(i+1);j++)
+            {
+                Sensor s = listSensor.get(j);
+                if(s.getListADJ().size()> maxADJ){
+                    maxADJ = s.getListADJ().size();
+                    keyMaxADJ = j; 
+                }
+            }
+            Sensor s = listSensor.get(keyMaxADJ);
+            txaResult.append(keyMaxADJ + " " + s.getX() + " " + s.getY() + " " + s.getDx() + " " + s.getDy() + " |" + s.getListADJ().toString() +"\n");
+        }
     }//GEN-LAST:event_btnExecuteActionPerformed
+
+    private void btnDrawNetworkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDrawNetworkActionPerformed
+        // TODO add your handling code here:
+        try {
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    DrawNetwork ex = new DrawNetwork(storageClass.getN(),storageClass.getGroup(),(int)storageClass.getW(),(int)storageClass.getH(),listSensor);
+                    ex.setVisible(true);
+                }
+            });
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+        }
+    }//GEN-LAST:event_btnDrawNetworkActionPerformed
 
     /**
      * @param args the command line arguments

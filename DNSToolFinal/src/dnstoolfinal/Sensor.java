@@ -6,27 +6,26 @@
 package dnstoolfinal;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 /**
  *
  * @author longy
  */
 public class Sensor {
-    private int x,y,dx,dy;
+    private int x,y;
     private double radius;
-    private float angle, timeLife;
+    private float angle, timeLife,cosAnpla,sinAnlpa;
     private ArrayList<Integer> listADJ =  new ArrayList();
     public Sensor() {
     }
 
-    public Sensor(int x, int y, int dx, int dy, double radius, float angle, float timeLife) {
+    public Sensor(int x, int y, double radius, float angle, float timeLife,float cosAnpla,float sinAnpla) {
         this.x = x;
         this.y = y;
-        this.dx = dx;
-        this.dy = dy;
         this.radius = radius;
         this.angle = angle;
         this.timeLife = timeLife;
+        this.cosAnpla = cosAnpla;
+        this.sinAnlpa = sinAnpla;
     }
 
     public int getX() {
@@ -70,25 +69,50 @@ public class Sensor {
     }
 
     public int getDx() {
-        return dx;
+        return (int) (x-8*sinAnlpa);
     }
 
-    public void setDx(int dx) {
-        this.dx = dx;
-    }
 
     public int getDy() {
-        return dy;
+        return (int) (y+8*(cosAnpla)-1);
     }
 
-    public void setDy(int dy) {
-        this.dy = dy;
+
+    public int getX0() {
+        return x+(int)(radius/2);
     }
+
+
+    public int getY0() {
+        return y+(int)(radius/2);
+    }
+
+    public void setCosAnpla(float cosAnpla) {
+        this.cosAnpla = cosAnpla;
+    }
+
+    public void setSinAnlpa(float sinAnlpa) {
+        this.sinAnlpa = sinAnlpa;
+    }
+
+
+    public int getDx0() {
+        return (int) (getX0()-radius*sinAnlpa);
+    }
+
+
+    public int getDy0() {
+        return (int) (getY0()+radius*(cosAnpla-1));
+    }
+
+    
     public boolean checkConnect(Sensor s)
     {
-        double r = this.radius;
-        double d =  Math.sqrt(Math.pow( (this.getX()-s.getX()) ,2 )+ Math.pow( (this.getY()-s.getY()) ,2));
-        double d1 =  Math.sqrt(Math.pow( (this.getDx()-s.getX()) ,2 )+ Math.pow( (this.getDy()-s.getY()) ,2));
+        double r = 2*this.radius;
+        //Khoảng cách từ s1 đến s2
+        double d =  Math.sqrt(Math.pow( (this.getX0()-s.getX0()) ,2 )+ Math.pow( (this.getY0()-s.getY0()) ,2));
+        //Khoảng cách từ s2 tới D
+        double d1 =  Math.sqrt(Math.pow( (this.getDx0()-s.getX0()) ,2 )+ Math.pow( (this.getDy0()-s.getY0()) ,2));
         double sD = d*r*((d*d + r*r - d1*d1)/(2*d*r));
         return d<=r && sD >= (d*Math.cos(angle));
     }
@@ -97,5 +121,8 @@ public class Sensor {
     }
     public ArrayList getListADJ(){
         return listADJ;
+    }
+    public double dist(Sensor s){
+        return Math.sqrt(Math.pow( (this.getX()-s.getX()) ,2 )+ Math.pow( (this.getY()-s.getY()) ,2));
     }
 }
