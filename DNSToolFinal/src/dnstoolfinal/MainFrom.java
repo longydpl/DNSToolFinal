@@ -64,6 +64,7 @@ public class MainFrom extends javax.swing.JFrame {
         txaResult = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Directinal Sensor Network Tool");
 
         lblTitle.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         lblTitle.setText("Directional Sensor Network Tool");

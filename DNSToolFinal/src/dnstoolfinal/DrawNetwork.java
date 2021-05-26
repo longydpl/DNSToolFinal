@@ -19,9 +19,9 @@ public class DrawNetwork extends JFrame{
         initUI(n,group,w,h,sHashMap);
     }
     public void initUI(int n, int group, int w, int h,HashMap<Integer,Sensor> sHashMap){
-        SensorNetwork sensorNetwork1 =  new SensorNetwork(n, group, sHashMap);
-        add(sensorNetwork1);
-        setTitle("Draw Sensor Network");
+        SensorNetwork sensorNetwork =  new SensorNetwork(n, group, sHashMap);
+        add(sensorNetwork);
+        setTitle("Sensor Network Demo");
         setSize(w,h);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

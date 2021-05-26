@@ -146,9 +146,13 @@ public class SensorNetwork extends JPanel implements ActionListener{
             int keysC = 0;
             for(int j = 1;j<C.size();j++){
                 Sensor sTemp = listSensor.get(C.get(j));
-                if(sG1.dist(sTemp)<midD) midD = sG1.dist(sTemp);
-                keysC = j;
+                if(sG1.dist(sTemp)<midD) 
+                {
+                    midD = sG1.dist(sTemp);
+                    keysC = j;
+                } 
             }
+            sC = listSensor.get(C.get(keysC));
             //Thả sensor để kết nối.
             MakeSensorBetween(sC, sG1, i, g2d, color);
             System.out.println(G1.get(0)+ " " + C.get(keysC) + "\n");
