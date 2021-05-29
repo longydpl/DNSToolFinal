@@ -20,7 +20,7 @@ public class MainFrom extends javax.swing.JFrame {
      * Creates new form MainFrom
      */
     //Tạo các biến sử dụng trong chương trình
-    StorageClass storageClass = new StorageClass();
+    Storage storageClass = new Storage();
     HashMap<Integer,Sensor> listSensor =  new HashMap();
     //End
     public MainFrom() {
@@ -58,13 +58,15 @@ public class MainFrom extends javax.swing.JFrame {
         lblKeNgang2 = new javax.swing.JLabel();
         btnClear = new javax.swing.JButton();
         btnCalculate = new javax.swing.JButton();
-        btnExecute = new javax.swing.JButton();
+        btnDeploy = new javax.swing.JButton();
         btnDrawNetwork = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txaResult = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Directinal Sensor Network Tool");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setResizable(false);
 
         lblTitle.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         lblTitle.setText("Directional Sensor Network Tool");
@@ -130,10 +132,10 @@ public class MainFrom extends javax.swing.JFrame {
             }
         });
 
-        btnExecute.setText("Execute");
-        btnExecute.addActionListener(new java.awt.event.ActionListener() {
+        btnDeploy.setText("Deploy");
+        btnDeploy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExecuteActionPerformed(evt);
+                btnDeployActionPerformed(evt);
             }
         });
 
@@ -203,7 +205,7 @@ public class MainFrom extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnCalculate)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnExecute)
+                                .addComponent(btnDeploy)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnDrawNetwork)))
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -265,7 +267,7 @@ public class MainFrom extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnClear)
                     .addComponent(btnCalculate)
-                    .addComponent(btnExecute)
+                    .addComponent(btnDeploy)
                     .addComponent(btnDrawNetwork))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
@@ -321,7 +323,7 @@ public class MainFrom extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCalculateActionPerformed
 
-    private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
+    private void btnDeployActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeployActionPerformed
         //Thả ngẫu nhiên các sensor
         Random r =  new Random();
         for(int i =0; i<storageClass.getGroup();i++)
@@ -360,7 +362,7 @@ public class MainFrom extends javax.swing.JFrame {
         {
             txaResult.append(m.getKey()+ " " );
             Sensor s = (Sensor) m.getValue();
-            txaResult.append(s.getX() + " " + s.getY() + " " + s.getDx() + " " + s.getDy() + " |" + s.getListADJ().toString() +"\n");
+            txaResult.append(s.getX0() + " " + s.getY0() + " | " + s.getListADJ().toString() +" |\n");
         }
         txaResult.append("\n--------------------------------------\n");
         for(int i = 0;i<storageClass.getGroup();i++)
@@ -379,7 +381,7 @@ public class MainFrom extends javax.swing.JFrame {
             Sensor s = listSensor.get(keyMaxADJ);
             txaResult.append(keyMaxADJ + " " + s.getX() + " " + s.getY() + " " + s.getDx() + " " + s.getDy() + " |" + s.getListADJ().toString() +"\n");
         }
-    }//GEN-LAST:event_btnExecuteActionPerformed
+    }//GEN-LAST:event_btnDeployActionPerformed
 
     private void btnDrawNetworkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDrawNetworkActionPerformed
         // TODO add your handling code here:
@@ -387,7 +389,7 @@ public class MainFrom extends javax.swing.JFrame {
             EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    DrawNetwork ex = new DrawNetwork(storageClass.getN(),storageClass.getGroup(),(int)storageClass.getW(),(int)storageClass.getH(),listSensor);
+                    Simulator ex = new Simulator(storageClass.getN(),storageClass.getGroup(),(int)storageClass.getW(),(int)storageClass.getH(),(int) storageClass.getR(),listSensor);
                     ex.setVisible(true);
                 }
             });
@@ -466,8 +468,8 @@ public class MainFrom extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalculate;
     private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnDeploy;
     private javax.swing.JButton btnDrawNetwork;
-    private javax.swing.JButton btnExecute;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblArea;
     private javax.swing.JLabel lblH;

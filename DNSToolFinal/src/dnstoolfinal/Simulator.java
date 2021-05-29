@@ -12,19 +12,19 @@ import javax.swing.JFrame;
  *
  * @author longy
  */
-public class DrawNetwork extends JFrame{
+public class Simulator extends JFrame{
 
-    public DrawNetwork (int n, int group, int w, int h, HashMap<Integer,Sensor> sHashMap)
+    public Simulator (int n, int group, int w, int h, int r, HashMap<Integer,Sensor> sHashMap)
     {
-        initUI(n,group,w,h,sHashMap);
+        initUI(n,group,w,h,r,sHashMap);
     }
-    public void initUI(int n, int group, int w, int h,HashMap<Integer,Sensor> sHashMap){
-        SensorNetwork sensorNetwork =  new SensorNetwork(n, group, sHashMap);
-        add(sensorNetwork);
+    public void initUI(int n, int group, int w, int h,int r,HashMap<Integer,Sensor> sHashMap){
+        SensorNetwork sensorNetwork1 =  new SensorNetwork(n, group, sHashMap);
+        add(sensorNetwork1);
         setTitle("Sensor Network Demo");
-        setSize(w,h);
+        setSize(w+r,h+r);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setResizable(true);
+        setResizable(false);
     }
 }

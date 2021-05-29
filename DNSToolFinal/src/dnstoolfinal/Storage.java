@@ -11,13 +11,13 @@ import java.text.DecimalFormat;
  *
  * @author longy
  */
-public class StorageClass {
+public class Storage {
     private double r,anpla;
     private float h,w,p;
     private int t,t0;
     private DecimalFormat df = new DecimalFormat("0.00");
 
-    public StorageClass() {
+    public Storage() {
     }
 
     public double getR() {
