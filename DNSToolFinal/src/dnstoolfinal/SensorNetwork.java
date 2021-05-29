@@ -35,28 +35,32 @@ public class SensorNetwork extends JPanel implements ActionListener{
     //Thuật toán MaxConComp
     private ArrayList<Integer> MaxConComp(HashMap<Integer,Sensor> G,int key, Sensor x,Boolean[] visted)
     {
-        visted[key] = true;
-        ArrayList<Integer> v = x.getListADJ();
-        ArrayList<Integer> ans = new ArrayList();
+        visted[key] = true; // Gán visted[x] =  true tức là đã thăm.
+        ArrayList<Integer> v = x.getListADJ(); // Lấy danh sách các cảm biến liền kề
+        ArrayList<Integer> ans = new ArrayList(); // Danh sách các cảm biến đã thăm
         int k=0;
         ans.add(key);
+        // Chạy vòng while kiếm tra từng con cảm biến liền kề
         while(k <= v.size()-1)
         {
             if(!visted[v.get(k)]) {
+                //Nếu cảm biến chưa được thăm, thực hiện đệ quy với chính cảm biến k.
                 ArrayList<Integer> arrayList = MaxConComp(G,v.get(k),G.get(v.get(k)), visted);
                 for(int i = 0;i<arrayList.size();i++)
                 {
                     ans.add(arrayList.get(i));
                 }
             }
-//            if(!visted[v.get(k)]) MaxConComp(G,v.get(k),G.get(v.get(k)), visted);
+            //Tăng biến k thực hiện tiếp vòng lặp.
             k++;
         }
         return ans;
     }
     private void DrawMaxConComp(int key, Sensor x,Boolean[] visted,Graphics2D g2d,int i, Color color)
     {
+        //Lấy danh sách các cảm biến kết nối.
         ArrayList<Integer> C = MaxConComp(listSensor, key, x, visted);
+        //Vẽ từng cảm biến lên màn hình, và nối chúng lại.
             for(int j = 0;j<C.size();j++)
             {
                 Sensor s = listSensor.get(C.get(j));
@@ -97,6 +101,8 @@ public class SensorNetwork extends JPanel implements ActionListener{
                 float sinAnpla = (float) ((x0-sG1.getX0())/d);
                 float cosAnpla = (float) (-(y0-sG1.getY0())/d) +1;
                 Sensor s = new Sensor(x, y, sG1.getRadius(), sG1.getAngle(), sG1.getTimeLife(), cosAnpla, sinAnpla);
+                //Nếu cảm biến mới tạo có thể kết nối với cảm biến trong G1, thực hiện vẽ
+                //ngược lại sẽ thực hiện đệ quy cho tới khi kết nối được với cảm biến trong G1.
                 if(s.checkConnect(sG1))
                 {
                     g2d.drawOval(s.getX(), s.getY(), 4, 4); 
@@ -139,7 +145,7 @@ public class SensorNetwork extends JPanel implements ActionListener{
         System.out.println(C.toString() + "\n" +G1.toString());
         if(!G1.isEmpty())
         {
-            //Tìm khoảng cách ngắn nhất.
+            //Tìm hai cảm biến có khoảng cách ngắn nhất.
             Sensor sG1 = listSensor.get(G1.get(0));
             Sensor sC = listSensor.get(C.get(0));
             double midD = sG1.dist(sC);
@@ -153,7 +159,7 @@ public class SensorNetwork extends JPanel implements ActionListener{
                 } 
             }
             sC = listSensor.get(C.get(keysC));
-            //Thả sensor để kết nối.
+            //Thả cảm biến  để kết nối hai cảm biến sC và sG1 với nhau.
             MakeSensorBetween(sC, sG1, i, g2d, color);
             System.out.println(G1.get(0)+ " " + C.get(keysC) + "\n");
             RepairNetwork(listSensor, G, G1.get(0), visted, g2d, i, color);
@@ -163,6 +169,7 @@ public class SensorNetwork extends JPanel implements ActionListener{
     {
         Graphics2D g2d = (Graphics2D) g;
         int n0 = n/group;
+        // Chia thành các nhóm để thực hiện vẽ với từng ký hiệu khác nhau.
         for(int i=0;i<group;i++)
         {
             Color color = new Color((int)(Math.random() * 0x1000000));
@@ -186,6 +193,7 @@ public class SensorNetwork extends JPanel implements ActionListener{
             {
                 visted[j] = false;
             }
+            // Thực hiện gọi hàm sửa chữa.
             RepairNetwork(listSensor, G, keyMaxADJ, visted, g2d, i, color);
         }
     }

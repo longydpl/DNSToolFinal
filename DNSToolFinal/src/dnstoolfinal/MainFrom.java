@@ -358,6 +358,7 @@ public class MainFrom extends javax.swing.JFrame {
         
         txaResult.append("\n--------------------------------------\n");
         txaResult.append("Coordinates of sensor:\n");
+        //In danh sách các cảm biến ra màn hình.
         for(Map.Entry m: listSensor.entrySet())
         {
             txaResult.append(m.getKey()+ " " );
@@ -365,6 +366,7 @@ public class MainFrom extends javax.swing.JFrame {
             txaResult.append(s.getX0() + " " + s.getY0() + " | " + s.getListADJ().toString() +" |\n");
         }
         txaResult.append("\n--------------------------------------\n");
+        //In các sinknode của từng nhóm.
         for(int i = 0;i<storageClass.getGroup();i++)
         {
             int n0 = storageClass.getN0();
