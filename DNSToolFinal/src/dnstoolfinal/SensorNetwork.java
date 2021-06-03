@@ -119,7 +119,7 @@ public class SensorNetwork extends JPanel implements ActionListener{
                     g2d.drawOval(s.getX(), s.getY(), 4, 4); 
                     g2d.drawLine(s.getX()+2, s.getY()+2, s.getDx(), s.getDy());
                     g2d.drawLine(s.getX()+2, s.getY()+2, sC.getX()+2, sC.getY()+2);
-                    g2d.drawLine(s.getX()+2, s.getY()+2, sG1.getX()+2, sG1.getY()+2);
+                    //g2d.drawLine(s.getX()+2, s.getY()+2, sG1.getX()+2, sG1.getY()+2);
                     if(i!=0)
                     {
                         g2d.setColor(color);

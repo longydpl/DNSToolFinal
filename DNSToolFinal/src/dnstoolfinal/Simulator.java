@@ -19,8 +19,8 @@ public class Simulator extends JFrame{
         initUI(n,group,w,h,r,sHashMap);
     }
     public void initUI(int n, int group, int w, int h,int r,HashMap<Integer,Sensor> sHashMap){
-        SensorNetwork sensorNetwork1 =  new SensorNetwork(n, group, sHashMap);
-        add(sensorNetwork1);
+        SensorNetwork sensorNetwork =  new SensorNetwork(n, group, sHashMap);
+        add(sensorNetwork);
         setTitle("Sensor Network Demo");
         setSize(w+r,h+r);
         setLocationRelativeTo(null);
